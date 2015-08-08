@@ -1,0 +1,8 @@
+#vivo harvester 1.5 is required to generate a vivo-additions.rdf.xml file for vor
+https://github.com/vivo-project/VIVO-Harvester/archive/master.zip
+#required site-packages to install for vor
+rdflib
+rdfextras
+requests
+isodate
+pyparsing
