@@ -47,7 +47,7 @@ Author or Collaborator name variation is addressed in coreffer.py, as that can't
 For the future, I'd like to decouple the ordered method calls in deduper.py from the code, and define workflows.
 Resolving duplicate journal to single URIs also seems overly complex, especially in the case where Deduper finds more than one match in Vivo on ISSN.
 
-What to do about Vivo Harvester's "splitting" errors?
+Suppose you've used Vivo Harvester to get back a dozen publications for Jane Faculty, and there is a co-author in that set identified both as John Q Public and JQ Public.  Yet, Vivo Harvester has assigned what probably is a single person two different URIs.  What to do about Vivo Harvester's "splitting" errors?  You could tune the weights and thresholds in the configuration file, but maybe we'd just like to apply a simple rule in this case.
 
 coreffer.py
 -----------
@@ -66,7 +66,7 @@ Here are some possibly helpful resources that may help with adding rules:
 http://www.census.gov/genealogy/www/data/2000surnames/surnames.pdf
 http://www.pbs.org/pov/thesweetestsound/popularityindex.php
 
-Vivo Harvester also tends to commit "lumping" errors.  What to do about that?
+Vivo Harvester also tends to commit "lumping" errors.  If you retrieve a set of publications for the author Jane Faculty, you may find a coauthor Brian Lee who has been assigned the URI of a person previously known as Kate Lee. Is there something we can do with the output, apart from twiddling the parameter settings of Vivo Harvester and running it again?
 
 refsplitter.py
 --------------
