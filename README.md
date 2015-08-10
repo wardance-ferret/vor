@@ -74,7 +74,7 @@ Coreffer balances Vivo Harvester's out-of-the-box conservative tendency to treat
 
 Here are some possibly helpful resources that may help with adding rules:
 <ul>
-http://www.census.gov/genealogy/www/data/2000surnames/surnames.pdf
+http://www.census.gov/topics/population/genealogy/data/2000_surnames.html
 http://www.pbs.org/pov/thesweetestsound/popularityindex.php
 </ul>
 Vivo Harvester also tends to commit "lumping" errors.  If you retrieve a set of publications for the author Jane Faculty, you may find a coauthor Brian Lee who has been assigned the URI of a person previously known as Kate Lee. Is there something we can do with the output, apart from twiddling the parameter settings of Vivo Harvester and running it again?
