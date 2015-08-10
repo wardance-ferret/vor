@@ -14,24 +14,28 @@ Because this was developed to harvest data from PubMed, the scripts allow you to
 
 -Uses logging, getopts.
 
--Both scripts require a Fuseki SPARQL endpoint for the Vivo you are harvesting to.
+-All three scripts require a Fuseki SPARQL endpoint for the Vivo you are harvesting to.
 
 Vivo Harvester creates duplicate entities (the same individual has two URIs), because
 it has no logic for merging old and new information.  What might help clean up this mess?
 
 deduper.py
 ----------
+<br>
+<code>
+Usage: deduper.py -i \<inputfile\> -k {"pmid"|"doi"}.  
+</code>
+<br>
+<br>
+For all three scripts, \<inputfile\> should be the file vivo-additions.rdf.xml created by Vivo Harvester, or an edited version of the same.  \<inputfile\> should be an absolute or relative path with the / separator, either on Windows or Unix.
 
-Usage: deduper.py -i \<inputfile\> -k {"pmid"|"doi"}.  \<inputfile\> should be an absolute or relative path with the / separator, either on Windows or Unix.
-
-For all three scripts, \<inputfile\> should be the file vivo-additions.rdf.xml created by Vivo Harvester, or an edited version of the same.
- 
 You must specify pmid (PubMed Identifier) or doi (Digital Object Identifier) as the unique identifier for publications, using the -k option.  If you omit the -k option, pmid is the default.
 
 Vivo Harvester 1.5 tends to output RDF files with a lot of duplication in the URIs, e.g. if publications are already in Vivo.  This is a healthy sign. In the case of publications, it means that Vivo Harvester found a unique identifier match, so it will create an old and a new record for that publication.  This script prefers the existing record in Vivo, in that case.  (Adequate, though not very sophisticated merging logic yet.)
 
 The order of method calls has evolved over time.  Because the purpose is to help a human being review not only the RDF file, but the method calls themselves, the data is not piped through.  Each method call writes out an intermediate file with a prefix (pd0, ... pd4, ...) that gives its order in the workflow.  Other duplicates targeted by the script include:
 
+<ul>
 -Duplicate Journals linked to a Publication
 <br>
 -Duplicate Authorships linked to an Publication
@@ -41,7 +45,8 @@ The order of method calls has evolved over time.  Because the purpose is to help
 -Duplicate Authorships (Included are the corresponding duplicates of Collaborators/Collaborations)
 <br> 
 -Redundant Collaboration if an Authorship already exists for a Publication
-
+</ul>
+<br>
 Author or Collaborator name variation is addressed in coreffer.py, as that can't be resolved here by a unique ID.
 
 For the future, I'd like to decouple the ordered method calls in deduper.py from the code, and define workflows.
@@ -51,8 +56,13 @@ Suppose you've used Vivo Harvester to get back a dozen publications for Jane Fac
 
 coreffer.py
 -----------
-
-Usage: coreffer.py -i \<inputfile\> -k {"pmid"|"doi"}.  \<inputfile\> should be an absolute or relative path with the / separator, either on Windows or Unix.
+<br>
+<code>
+Usage: coreffer.py -i \<inputfile\> -k {"pmid"|"doi"}.
+</code>
+<br>
+<br>
+\<inputfile\> should be an absolute or relative path with the / separator, either on Windows or Unix.
 
 You must specify pmid (PubMed Identifier) or doi (Digital Object Identifier) as the unique identifier for publications, using the -k option.  If you omit the -k option, pmid is the default.
 
@@ -63,16 +73,21 @@ Coreffer uses hard-and-fast rules, and there are currently only two.  You can't 
 Coreffer balances Vivo Harvester's out-of-the-box conservative tendency to treat most name mention differences as distinct individuals. However, because Harvester's algorithm can be tuned with parameters, and this one can't, it'd be better to use this class carefully.  It's better probably to run the script after Vivo Harvester has first scored and matched person names with its out-of-the-box parameter settings.
 
 Here are some possibly helpful resources that may help with adding rules:
+<ul>
 http://www.census.gov/genealogy/www/data/2000surnames/surnames.pdf
 http://www.pbs.org/pov/thesweetestsound/popularityindex.php
-
+</ul>
 Vivo Harvester also tends to commit "lumping" errors.  If you retrieve a set of publications for the author Jane Faculty, you may find a coauthor Brian Lee who has been assigned the URI of a person previously known as Kate Lee. Is there something we can do with the output, apart from twiddling the parameter settings of Vivo Harvester and running it again?
 
 refsplitter.py
 --------------
-
-Usage: refsplitter.py -i \<inputfile\> -k {"pmid"|"doi"} -d "<http://myvivoschool.edu/>".  \<inputfile\> should be an absolute or relative path with the / separator, either on Windows or Unix.
-
+<br>
+<code>
+Usage: refsplitter.py -i \<inputfile\> -k {"pmid"|"doi"} -d "<http://myvivoschool.edu/>".
+</code>
+<br>
+<br>
+\<inputfile\> should be an absolute or relative path with the / separator, either on Windows or Unix.
 
 Refsplitter splits references to individuals (Faculty, John or Faculty, Jane) by comparing the rdfs label for the person (either in the input model or in the vivo model) against the rdfs label for the authorship.  For example, an authorship "Authorship for Faculty, Jane" may be lumped with faculty "Faculty, John."  RefSplitter balances Harvester's liberal tendency on certain names, particularly short surnames like Lee or Li, to lump authorships with the wrong individual.  However, because Harvester's algorithm can be tuned with parameters, and this one can't, it'd be better to use this class carefully.  Try running it after Harvester has already done name matching, and after you've run coreffer.py to correct possible splitting errors.
 
