@@ -149,13 +149,17 @@ class RefSplitter:
         
         someOtherUri=""
         if (lnv != lnl):
+            logging.debug("lastnames didn't match!")
             return someOtherUri
         #William Kelly and H William Kelly should not be de-lumped, although they are not in the same prefix chain
-        if ((len(fnl)==1 and mnl != "" and mnl==fnv) or (len(fnv)==1 and mnv!="" and mnv==fnl)):
+        if ((len(fnl)==1 and len(mnl)>1 and mnl==fnv) or (len(fnv)==1 and len(mnv)>1 and mnv==fnl)):
+            logging.debug("author doesn't appear to go by first name, handling that as optional!")
             return authorUri
         if (mnv !="" and mnl != "" and not mnv.startswith(mnl) and not mnl.startswith(mnv)):
+            logging.debug("middle inits couldn't be reconciled!")
             return someOtherUri
         if (not fnv.startswith(fnl) and not fnl.startswith(fnv)):
+            logging.debug("first names couldn't be reconciled!")
             return someOtherUri
         return authorUri
         
